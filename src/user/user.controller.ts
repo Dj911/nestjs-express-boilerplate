@@ -1,0 +1,50 @@
+import { Body, Controller, forwardRef, Get, Inject, Logger, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
+import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/passport-strategy.guard'
+import { Role } from 'src/helpers/constant';
+import { Roles } from 'src/decorators/roles.decorator';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { UserService } from './user.service';
+import { UserLoginBodyDto, UserSignupBodyDto } from './dto/body.dto';
+
+@Controller('user')
+export class UserController {
+    public Logger = new Logger(UserController.name)
+
+    constructor(
+        private UserService: UserService,
+    ) {}
+    
+    @Post('login')
+    // @UseGuards(LocalAuthGuard)
+    userLogin(@Req() req: Request,@Body() body: UserLoginBodyDto){
+      this.Logger.log('USER LOGIN ROUTE',req.user)
+      
+      return this.UserService.login(body)
+    }
+
+    @Post('signup')
+    userSignup(@Body() body: UserSignupBodyDto){
+      this.Logger.log('USER LOGIN ROUTE')
+      
+      return this.UserService.signUp(body)
+    }
+    
+    @Get('profile')
+    @UseGuards(JwtAuthGuard)
+    getProfile(@Req() req: Request) {
+      this.Logger.log('GET USER ROUTE',req.user)
+      
+      return this.UserService.getUserProfileById(req.user._id)
+    }
+
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Get('profile/:id')
+    @Roles(Role.USER)
+    getUserProfileById(@Param('id') id: string){
+      this.Logger.log('GET USER ROUTE')
+
+      return this.UserService.getUserProfileById(id)
+    }
+
+}
