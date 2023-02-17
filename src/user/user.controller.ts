@@ -1,11 +1,12 @@
-import { Body, Controller, forwardRef, Get, Inject, Logger, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
-import { JwtAuthGuard, LocalAuthGuard } from 'src/auth/passport-strategy.guard'
-import { Role } from 'src/helpers/constant';
-import { Roles } from 'src/decorators/roles.decorator';
-import { RolesGuard } from 'src/guards/roles.guard';
-import { UserService } from './user.service';
-import { UserLoginBodyDto, UserSignupBodyDto } from './dto/body.dto';
+
+import { JwtAuthGuard, LocalAuthGuard } from '@auth/passport-strategy.guard'
+import { Role } from '@helpers/constant';
+import { Roles } from '@decorators/roles.decorator';
+import { RolesGuard } from '@guards/roles.guard';
+import { UserService } from '@user/user.service';
+import { UserLoginBodyDto, UserSignupBodyDto } from '@user/dto/body.dto';
 
 @Controller('user')
 export class UserController {
@@ -16,7 +17,7 @@ export class UserController {
     ) {}
     
     @Post('login')
-    // @UseGuards(LocalAuthGuard)
+    @UseGuards(LocalAuthGuard)
     userLogin(@Req() req: Request,@Body() body: UserLoginBodyDto){
       this.Logger.log('USER LOGIN ROUTE',req.user)
       

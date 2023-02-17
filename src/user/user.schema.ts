@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 
-import { DB, Role } from "src/helpers/constant";
+import { DB, Role } from "@helpers/constant";
 
 export interface IUser extends Document {
     _id: Schema.Types.ObjectId;

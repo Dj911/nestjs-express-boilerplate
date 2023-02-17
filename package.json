@@ -34,6 +34,7 @@
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "helmet": "^6.0.1",
+    "module-alias": "^2.2.2",
     "mongoose": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
@@ -82,5 +83,16 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "_moduleAlias":{
+    "@root": "build",
+    "@src": "build/src",
+    "@guards": "build/src/guards",
+    "@validations": "build/validations",
+    "@decorators": "build/src/decorators",
+    "@config": "build/src/config",
+    "@user": "build/src/user",
+    "@auth": "build/src/auth",
+    "@helpers": "build/src/helpers/"
   }
 }

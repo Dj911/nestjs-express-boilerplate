@@ -2,12 +2,13 @@ import { BadRequestException, Injectable, Logger, NotFoundException } from '@nes
 import { InjectModel } from '@nestjs/mongoose';
 import { randomBytes, scryptSync } from 'crypto';
 import { Model } from 'mongoose';
-import { AuthService } from 'src/auth/auth.service';
-import { DB } from 'src/helpers/constant';
-import { Messages } from 'src/helpers/messages';
-import { UserLoginBodyDto, UserSignupBodyDto } from './dto/body.dto';
-import { UserResponseDto, UserSignUpAndLoginResponseDto } from './dto/response.dto';
-import { IUser } from './user.schema';
+
+import { AuthService } from '@auth/auth.service';
+import { DB } from '@helpers/constant';
+import { Messages } from '@helpers/messages';
+import { UserLoginBodyDto, UserSignupBodyDto } from '@user/dto/body.dto';
+import { UserResponseDto, UserSignUpAndLoginResponseDto } from '@user/dto/response.dto';
+import { IUser } from '@user/user.schema';
 
 @Injectable()
 export class UserService {
@@ -35,7 +36,7 @@ export class UserService {
 
         payload.password = res
 
-        const user = await this.User.create(payload)
+        await this.User.create(payload)
 
         const resObj: UserSignUpAndLoginResponseDto = {
             message: Messages.USER_SIGNUP_SUCCESS
@@ -57,8 +58,6 @@ export class UserService {
 
         const hash = scryptSync(password, salt, 32)
 
-        const pass = hash.toString('hex')
-
         if (hash.toString('hex') !== storedHash)    throw new BadRequestException(Messages.USER_LOGIN_FAILED);
 
         if(!check)  throw new BadRequestException(Messages.USER_LOGIN_FAILED)
@@ -77,17 +76,11 @@ export class UserService {
     async validateUser(userName: string, password: string){
         this.Logger.log('Inside validate user service')
 
-        const user = await this.User.findOne({userName})
-
-        const check = await this.User.findOne({
-            userName
-        }).lean()
+        const user = await this.User.findOne({userName}).lean()
 
         const [salt, storedHash] = user.password.split('.');
 
         const hash = scryptSync(password, salt, 32)
-
-        const pass = hash.toString('hex')
         
         if(hash.toString('hex') === storedHash){
             const { password, ...rest} = user
