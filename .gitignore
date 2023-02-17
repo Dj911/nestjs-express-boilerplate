@@ -3,6 +3,7 @@
 /build
 /node_modules
 .env
+*.tsbuildinfo
 
 # Logs
 logs
