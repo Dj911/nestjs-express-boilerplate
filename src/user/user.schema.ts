@@ -7,18 +7,18 @@ export interface IUser extends Document {
     name: string;
     password: string;
     username: string;
-    roles: Role
+    roles: [Role]
 }
 
 export const UserSchema: Schema<IUser> = new Schema({
     name: String,
     username: String,
     password: String,
-    roles: {
+    roles: [{
         type: String,
-        enum: [Role.ADMIN,Role.USER],
+        enum: [Role],
         default: Role.USER
-    }
+    }]
 },{
     timestamps: true
 })

@@ -5,7 +5,9 @@ export const PASSPORT_STRATEGIES = {
 
 export enum Role {
     USER = 'USER',
-    ADMIN = 'ADMIN'
+    ADMIN = 'ADMIN',
+    ADD_USER = 'ADD_USER',
+    VIEW_USER='VIEW_USER'
 }
 
 export enum DB {

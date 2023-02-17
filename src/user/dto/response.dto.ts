@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator'
+import { IsArray, IsDateString, IsEnum, IsOptional, IsString } from 'class-validator'
 import { Schema } from 'mongoose';
 import { Role } from 'src/helpers/constant';
 
@@ -16,8 +16,10 @@ export class UserResponseDto {
     @IsString()
     username: string;
 
-    @IsEnum(Role)
-    roles: string
+    @IsArray()
+    @IsEnum([Role])
+    @IsOptional()
+    roles: Role[]
 
     @IsDateString()
     @IsOptional()

@@ -30,6 +30,15 @@ export class UserController {
       
       return this.UserService.signUp(body)
     }
+
+    @Post('addUser')
+    @UseGuards(JwtAuthGuard,RolesGuard)
+    @Roles(Role.USER,Role.ADD_USER)
+    addUser(@Body() body: UserSignupBodyDto){
+      this.Logger.log('ADD USER ROUTE')
+      
+      return this.UserService.signUp(body)
+    }
     
     @Get('profile')
     @UseGuards(JwtAuthGuard)
@@ -41,7 +50,7 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard,RolesGuard)
     @Get('profile/:id')
-    @Roles(Role.USER)
+    @Roles(Role.VIEW_USER)
     getUserProfileById(@Param('id') id: string){
       this.Logger.log('GET USER ROUTE')
 
