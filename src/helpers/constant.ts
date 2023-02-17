@@ -3,10 +3,6 @@ export const PASSPORT_STRATEGIES = {
     JWT: 'jwt'
 }
 
-export const JWT = {
-    SECRET: "ASKbgaljsg asm hajskg jkasdfhdsckasv"
-}
-
 export enum Role {
     USER = 'USER',
     ADMIN = 'ADMIN'

@@ -76,13 +76,15 @@ export class UserService {
     async validateUser(userName: string, password: string){
         this.Logger.log('Inside validate user service')
 
-        const user = await this.User.findOne({userName}).lean()
+        const user = await this.User.findOne({username: userName}).lean()
 
         const [salt, storedHash] = user.password.split('.');
 
         const hash = scryptSync(password, salt, 32)
+
+        const inputHash = hash.toString('hex')
         
-        if(hash.toString('hex') === storedHash){
+        if(inputHash === storedHash){
             const { password, ...rest} = user
             
             return rest
