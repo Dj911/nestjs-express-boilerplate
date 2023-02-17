@@ -25,7 +25,7 @@
         "src/helpers/*"
       ],
       "@validations/*": [
-        "validations/*"
+        "src/validations/*"
       ],
       "@decorators/*": [
         "src/decorators/*"

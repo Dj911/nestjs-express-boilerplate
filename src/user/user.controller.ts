@@ -7,6 +7,9 @@ import { Roles } from '@decorators/roles.decorator';
 import { RolesGuard } from '@guards/roles.guard';
 import { UserService } from '@user/user.service';
 import { UserLoginBodyDto, UserSignupBodyDto } from '@user/dto/body.dto';
+import { UsePipes } from '@nestjs/common';
+import { JoiValidationPipe } from '../validations/joi.validate';
+import { login_schema, signup_schema } from '../validations/joi.schema';
 
 @Controller('user')
 export class UserController {
@@ -17,14 +20,16 @@ export class UserController {
     ) {}
     
     @Post('login')
+    @UsePipes(new JoiValidationPipe(login_schema))
     @UseGuards(LocalAuthGuard)
     userLogin(@Req() req: Request,@Body() body: UserLoginBodyDto){
-      this.Logger.log('USER LOGIN ROUTE',req.user)
+      this.Logger.log('USER LOGIN ROUTE')
       
       return this.UserService.login(body)
     }
 
     @Post('signup')
+    @UsePipes(new JoiValidationPipe(signup_schema))
     userSignup(@Body() body: UserSignupBodyDto){
       this.Logger.log('USER LOGIN ROUTE')
       

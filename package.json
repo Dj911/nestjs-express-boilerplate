@@ -34,6 +34,7 @@
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "helmet": "^6.0.1",
+    "joi": "^17.7.1",
     "module-alias": "^2.2.2",
     "mongoose": "^6.9.1",
     "passport": "^0.6.0",
@@ -84,7 +85,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-  "_moduleAlias":{
+  "_moduleAlias": {
     "@root": "build",
     "@src": "build/src",
     "@guards": "build/src/guards",

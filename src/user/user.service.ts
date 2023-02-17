@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { randomBytes, scryptSync } from 'crypto';
 import { Model } from 'mongoose';
@@ -24,9 +24,9 @@ export class UserService {
 
         const {password,username} = payload
 
-        const check = await this.User.findOne({username});
+        const check = await this.User.findOne({username}).lean();
 
-        if (check) new NotFoundException(Messages.USER_EXIST);
+        if (check) throw new NotFoundException(Messages.USER_EXIST);
 
         const salt = randomBytes(8).toString('hex');
 
