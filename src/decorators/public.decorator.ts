@@ -1,2 +1,4 @@
 import { SetMetadata } from '@nestjs/common';
-export const Public = () => SetMetadata('isPublic', true);
+import { PUBLIC_ROUTE } from '../helpers/constant';
+
+export const Public = () => SetMetadata(PUBLIC_ROUTE, true);

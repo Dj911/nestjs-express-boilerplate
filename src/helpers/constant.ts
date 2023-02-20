@@ -11,6 +11,8 @@ export enum Role {
     VIEW_USER='VIEW_USER'
 }
 
+export const PUBLIC_ROUTE = 'isPublic'
+
 export enum DB {
     USER = 'UserTest'
 }
