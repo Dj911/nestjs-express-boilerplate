@@ -4,6 +4,7 @@ export const PASSPORT_STRATEGIES = {
 }
 
 export enum Role {
+    PUBLIC = 'PUBLIC',
     USER = 'USER',
     ADMIN = 'ADMIN',
     ADD_USER = 'ADD_USER',

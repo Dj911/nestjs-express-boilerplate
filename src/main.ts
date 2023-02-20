@@ -1,15 +1,19 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerDocumentOptions, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 
 import { AppModule } from '@src/app.module';
+import { JwtAuthGuard } from './auth/passport-strategy.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule,{
     logger: ['log','error'],
     cors: true,
   });
+  const reflector = app.get(Reflector)
+  app.useGlobalGuards(new JwtAuthGuard(reflector))
+
   app.use(cookieParser());
   app.use(helmet())
 

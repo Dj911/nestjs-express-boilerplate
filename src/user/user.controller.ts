@@ -10,8 +10,11 @@ import { UserLoginBodyDto, UserSignupBodyDto } from '@user/dto/body.dto';
 import { UsePipes } from '@nestjs/common';
 import { JoiValidationPipe } from '../validations/joi.validate';
 import { login_schema, signup_schema } from '../validations/joi.schema';
+import { Public } from '../decorators/public.decorator';
 
 @Controller('user')
+@UseGuards(RolesGuard)
+@Roles(Role.PUBLIC)
 export class UserController {
     public Logger = new Logger(UserController.name)
 
@@ -20,6 +23,7 @@ export class UserController {
     ) {}
     
     @Post('login')
+    @Public()
     @UsePipes(new JoiValidationPipe(login_schema))
     @UseGuards(LocalAuthGuard)
     userLogin(@Req() req: Request,@Body() body: UserLoginBodyDto){
@@ -29,6 +33,7 @@ export class UserController {
     }
 
     @Post('signup')
+    @Public()
     @UsePipes(new JoiValidationPipe(signup_schema))
     userSignup(@Body() body: UserSignupBodyDto){
       this.Logger.log('USER LOGIN ROUTE')
@@ -37,7 +42,7 @@ export class UserController {
     }
 
     @Post('addUser')
-    @UseGuards(JwtAuthGuard,RolesGuard)
+    @UseGuards(RolesGuard)
     @Roles(Role.USER,Role.ADD_USER)
     addUser(@Body() body: UserSignupBodyDto){
       this.Logger.log('ADD USER ROUTE')
@@ -46,14 +51,13 @@ export class UserController {
     }
     
     @Get('profile')
-    @UseGuards(JwtAuthGuard)
     getProfile(@Req() req: Request) {
-      this.Logger.log('GET USER ROUTE',req.user)
+      this.Logger.log('GET USER ROUTE')
       
       return this.UserService.getUserProfileById(req.user._id)
     }
 
-    @UseGuards(JwtAuthGuard,RolesGuard)
+    @UseGuards(RolesGuard)
     @Get('profile/:id')
     @Roles(Role.VIEW_USER)
     getUserProfileById(@Param('id') id: string){
