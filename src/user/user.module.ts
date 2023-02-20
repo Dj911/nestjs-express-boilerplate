@@ -5,11 +5,12 @@ import { UserSchema } from '@user/user.schema';
 import { UserService } from '@user/user.service';
 import { UserController } from '@user/user.controller';
 import { AuthModule } from '@auth/auth.module';
+import { DB } from '../helpers/constant';
 
 @Module({
   providers: [UserService],
   imports: [
-    MongooseModule.forFeature([{name: 'UserTest', schema: UserSchema}]),
+    MongooseModule.forFeature([{name: DB.USER, schema: UserSchema}]),
     forwardRef(() => AuthModule)
   ],
   controllers: [UserController],
