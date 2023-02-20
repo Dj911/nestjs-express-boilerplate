@@ -20,7 +20,8 @@ import configuration from '@config/configuration';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env`,
-      load: [configuration],
+      // To use custom multiple configurations
+      // load: [configuration],
     }),
     MongooseModule.forRoot(process.env.DB_SRV,
       /* {
