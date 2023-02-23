@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { forwardRef, Module, OnModuleInit } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { UserSchema } from '@user/user.schema';
@@ -10,10 +10,18 @@ import { DB } from '../helpers/constant';
 @Module({
   providers: [UserService],
   imports: [
-    MongooseModule.forFeature([{name: DB.USER, schema: UserSchema}]),
-    forwardRef(() => AuthModule)
+    MongooseModule.forFeature([{ name: DB.USER, schema: UserSchema }]),
+    forwardRef(() => AuthModule),
   ],
   controllers: [UserController],
   exports: [UserService],
 })
-export class UserModule {}
+export class UserModule implements OnModuleInit {
+  constructor(private UserService: UserService) {}
+
+  async onModuleInit() {
+    // This function will be called immediately once the User Module is first initialized
+    // So if we want to create a default user when the server is started then just call the service as below
+    // await this.UserService.createDefaultAdmin();
+  }
+}
