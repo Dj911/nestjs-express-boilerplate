@@ -1,0 +1,24 @@
+<html>
+
+<head>
+    Test Socket
+    <script>
+        const socket = new WebSocket('ws://localhost:5000');
+        socket.onopen = function () {
+            console.log('Connected');
+            socket.send(
+                JSON.stringify({
+                    event: 'message',
+                    data: 'test',
+                }),
+            );
+            socket.onmessage = function (data) {
+                console.log('DT: ', JSON.parse(data.data));
+            };
+        };
+    </script>
+</head>
+
+<body></body>
+
+</html>

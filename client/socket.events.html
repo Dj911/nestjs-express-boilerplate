@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    SOCKET.IO
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+        integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+        crossorigin="anonymous"></script>
+    <script>
+        const socket = io('http://localhost:8080');
+        socket.on('connect', function () {
+            console.log('Connected');
+
+            // socket.emit('events', { test: 'test' });
+            socket.emit('message', response => {
+                var data = '{"Name":"John Doe","Email":"john@doe.com","Gender":"male"}';
+                data = JSON.parse(JSON.stringify(response.docs));
+
+                // (C) GENERATE TABLE
+                // (C1) CREATE EMPTY TABLE
+                var table = document.createElement("table"), row, cellA, cellB;
+                document.getElementById("demoA").appendChild(table);
+                let cnt = 0
+                for (let key in data) {
+                    for (const k in data[key]) {
+                        if (Object.hasOwnProperty.call(key, k)) {
+                            const element = key[k];
+                        }
+                    }
+                    // (C2) ROWS & CELLS
+                    row = table.insertRow();
+
+                    const dataKeys = Object.keys(data[key])
+                    const dataValues = Object.values(data[key])
+                    let valueRow = table.insertRow()
+                    for (let i = 0; i < dataKeys.length; i++) {
+                        const key = dataKeys[i];
+                        const value = dataValues[i]
+
+                        cellB = valueRow.insertCell();
+                        // (C3) KEY & VALUE
+                        if (cnt < dataKeys.length) {
+                            cellA = row.insertCell()
+                            cellA.bgColor = 'blue'
+                            // cellA.offsetWidth = '20px'
+                            cellA.innerHTML = key;
+                        }
+                        cnt++
+                        cellB.innerHTML = value;
+                        cellB.bgColor = 'yellow'
+
+                    }
+
+                }
+            });
+        }
+        )
+        socket.on('message', function (data) {
+            console.log('event MSG: ', data);
+        });
+        socket.on('exception', function (data) {
+            console.log('event exception: ', data);
+        });
+        socket.on('disconnect', function () {
+            console.log('Disconnected');
+        });
+    </script>
+
+</head>
+
+<body>
+    <p id="para1">THis si para</p>
+    <div id="demoA"></div>
+</body>
+
+</html>

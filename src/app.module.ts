@@ -2,17 +2,29 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { Cron, CronExpression, ScheduleModule } from '@nestjs/schedule';
+import { IoAdapter } from '@nestjs/platform-socket.io';
+// import {WebS} from '@nestjs/websockets'
 
 import { AppController } from '@src/app.controller';
 import { AppService } from '@src/app.service';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
-import configuration from '@config/configuration';
+import { EventsGateway } from './events/events.gateway';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
     UserModule,
     AuthModule,
+    ScheduleModule.forRoot(),
+    /* IoAdapter.forRoot({
+      cors: {
+        origin: 'http://localhost:3000',
+        methods: ['GET', 'POST'],
+      },
+    }), */
+
     ThrottlerModule.forRoot({
       ttl: 60,
       limit: 10,
@@ -23,7 +35,8 @@ import configuration from '@config/configuration';
       // To use custom multiple configurations
       // load: [configuration],
     }),
-    MongooseModule.forRoot(process.env.DB_SRV,
+    MongooseModule.forRoot(
+      process.env.DB_SRV,
       /* {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -36,9 +49,19 @@ import configuration from '@config/configuration';
         })
         }
       }),
-    } */),
+    } */
+    ),
+    /*
+     * Uncomment this to use the Default Web Socket of NestJs
+     */
+    EventsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EventsGateway],
 })
-export class AppModule {}
+export class AppModule {
+  /* @Cron(CronExpression.EVERY_5_SECONDS)
+  minuteCron() {
+    console.log('This will be called every 5 seconds');
+  } */
+}
