@@ -11,7 +11,7 @@ import { WsAdapter } from '@nestjs/platform-ws';
 
 import { AppModule } from '@src/app.module';
 import { JwtAuthGuard } from './auth/passport-strategy.guard';
-import { RedisIoAdapter } from './adapters/socket-io.adapter';
+// import { RedisIoAdapter } from './adapters/socket-io.adapter';
 import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
@@ -28,7 +28,7 @@ async function bootstrap() {
   // Default Web Socket
   // app.useWebSocketAdapter(new WsAdapter(app));
   const socketAdapter = new IoAdapter(app);
-  // await socketAdapter.createIOServer(5050);
+  await socketAdapter.createIOServer(5050);
   app.useWebSocketAdapter(socketAdapter);
 
   const config = new DocumentBuilder()

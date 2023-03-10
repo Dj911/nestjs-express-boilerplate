@@ -18,6 +18,8 @@ import {
   UserSignUpAndLoginResponseDto,
 } from '@user/dto/response.dto';
 import { IUser } from '@user/user.schema';
+import { Socket } from 'socket.io';
+import { EventsGateway } from '../events/events.gateway';
 
 @Injectable()
 export class UserService {
@@ -26,6 +28,7 @@ export class UserService {
   constructor(
     @InjectModel(DB.USER) private readonly User: PaginateModel<IUser>,
     private AuthService: AuthService,
+    private socket: EventsGateway,
   ) {}
 
   async signUp(
@@ -48,6 +51,15 @@ export class UserService {
     payload.password = res;
 
     await this.User.create(payload);
+
+    this.socket.server.emit(
+      'emit-message',
+      await this.getAllUsers({
+        perPage: 2,
+        page: 1,
+        sort: 1,
+      }),
+    );
 
     const resObj: UserSignUpAndLoginResponseDto = {
       message: Messages.USER_SIGNUP_SUCCESS,

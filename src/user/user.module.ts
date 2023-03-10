@@ -6,9 +6,10 @@ import { UserService } from '@user/user.service';
 import { UserController } from '@user/user.controller';
 import { AuthModule } from '@auth/auth.module';
 import { DB } from '../helpers/constant';
+import { EventsGateway } from '../events/events.gateway';
 
 @Module({
-  providers: [UserService],
+  providers: [UserService, EventsGateway],
   imports: [
     MongooseModule.forFeature([{ name: DB.USER, schema: UserSchema }]),
     forwardRef(() => AuthModule),

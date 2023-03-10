@@ -10,8 +10,9 @@ import { AppController } from '@src/app.controller';
 import { AppService } from '@src/app.service';
 import { UserModule } from '@user/user.module';
 import { AuthModule } from '@auth/auth.module';
-import { EventsGateway } from './events/events.gateway';
+// import { EventsGateway } from './events/events.gateway';
 import { EventsModule } from './events/events.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -54,10 +55,13 @@ import { EventsModule } from './events/events.module';
     /*
      * Uncomment this to use the Default Web Socket of NestJs
      */
-    EventsModule,
+    // EventsModule,
+    MulterModule.register({
+      dest: './files',
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService, EventsGateway],
+  providers: [AppService],
 })
 export class AppModule {
   /* @Cron(CronExpression.EVERY_5_SECONDS)

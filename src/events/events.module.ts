@@ -12,5 +12,6 @@ import { AuthModule } from '../auth/auth.module';
     MongooseModule.forFeature([{ name: DB.USER, schema: UserSchema }]),
     AuthModule,
   ],
+  exports: [EventsGateway],
 })
 export class EventsModule {}
