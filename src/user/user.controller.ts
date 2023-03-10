@@ -18,22 +18,20 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { UsePipes } from '@nestjs/common';
 
-import { JwtAuthGuard, LocalAuthGuard } from '@auth/passport-strategy.guard';
-import { Role } from '@helpers/constant';
+import { LocalAuthGuard } from '@auth/passport-strategy.guard';
+import { FILE_STORAGE_PATH, Role } from '@helpers/constant';
 import { Roles } from '@decorators/roles.decorator';
 import { RolesGuard } from '@guards/roles.guard';
 import { UserService } from '@user/user.service';
 import { UserLoginBodyDto, UserSignupBodyDto } from '@user/dto/body.dto';
-import { UsePipes } from '@nestjs/common';
 import { JoiValidationPipe } from '../validations/joi.validate';
 import { login_schema, signup_schema } from '../validations/joi.schema';
 import { Public } from '../decorators/public.decorator';
 import { shopify } from '../config/shopify';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { createReadStream } from 'fs';
-import { join } from 'path';
-import { diskStorage, memoryStorage } from 'multer';
 
 @Controller('user')
 @UseGuards(RolesGuard)
@@ -202,7 +200,7 @@ export class UserController {
     );
 
     res.sendFile(file.filename, {
-      root: `/media/bytes-dharmaraj/workspace/projects/Sandbox/nestjs boilerplate/nest-boilerplate/files`,
+      root: file.destination,
     });
   }
 
@@ -210,7 +208,9 @@ export class UserController {
   @Public()
   async getProfileImage(@Param('img') imgPath: string, @Res() res: Response) {
     res.sendFile(imgPath, {
-      root: `/media/bytes-dharmaraj/workspace/projects/Sandbox/nestjs boilerplate/nest-boilerplate/files`,
+      root: FILE_STORAGE_PATH,
     });
   }
 }
+
+// How to get the root folder path in nest js
